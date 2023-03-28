@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace CircularPriorityQueue
@@ -95,7 +95,8 @@ namespace CircularPriorityQueue
         }
         public void DeleteAll()
         {
-
+            this.front = -1;
+            this.rear = -1;
         }
         public int lengthOfQueue()
         {
@@ -165,22 +166,51 @@ namespace CircularPriorityQueue
             {
                 this.front = newNode;
                 this.back = this.front;
+                this.back.next = this.front;
             }
             else
             {
-                QueueNode? current = this.front;
-                while (current?.next != null && newNode.priority < current.priority)
+                this.back.next = newNode;
+                this.back = newNode;
+                this.back.next = this.front;
+                // QueueNode? current = this.front;
+                // if(current.next == null)
+                // {
+                //     current.next = newNode;
+                // }
+                // else
+                // {
+                //     newNode.next = current.next;
+                //     current.next = newNode;
+                // }
+            }
+            sequenceQueue();
+        }
+        public void sequenceQueue()
+        {
+            QueueNode? current = this.front;
+            if(current == null)
+            {
+                return ;
+            }
+            while (current?.next!=null)
+            {
+                QueueNode next = current.next;
+                if(next.priority>current.priority)
                 {
-                    current = current.next;
+                    //Data type change here
+                    String tempData = current.data;
+                    int tempPriority = current.priority;
+                    current.data = next.data;
+                    current.priority = next.priority;
+                    next.data = tempData;
+                    next.priority = tempPriority;
                 }
-                if(current.next == null)
+                current = current.next;
+                //Circular queue break if current comes back to front
+                if(current == this.front)
                 {
-                    current.next = newNode;
-                }
-                else
-                {
-                    newNode.next = current.next;
-                    current.next = newNode;
+                    break;
                 }
             }
         }
@@ -190,9 +220,16 @@ namespace CircularPriorityQueue
             {
                 Console.WriteLine("Empty Queue");
             }
+            else if(this.front ==  this.back)
+            {
+                String returnString = this.front.data;
+                this.front = null;
+                this.back = null;
+                return returnString;
+            }
             else
             {
-                String returnString = front.data;
+                String returnString = this.front.data;
                 this.front = this.front.next;
 
                 if(this.front == null)
@@ -218,6 +255,10 @@ namespace CircularPriorityQueue
                 {
                     Console.WriteLine(temp.data);
                     temp = temp.next;
+                    if(temp==this.front)
+                    {
+                        break;
+                    }
                 }
             }
         }
