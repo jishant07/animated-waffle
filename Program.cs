@@ -79,7 +79,8 @@ namespace CircularPriorityQueue
         }
         public void PrintAll()
         {
-            if(this.front == -1 && this.rear == -1)
+            Console.WriteLine("*** Current Circular Array ***");
+            if (this.front == -1 && this.rear == -1)
             {
                 Console.WriteLine("Empty Queue");
             }
@@ -154,7 +155,7 @@ namespace CircularPriorityQueue
             this.front = null;
             this.back = null;
         }
-        public void enqueue(string input, int inputPriority)
+        public void enqueue(String input, int inputPriority)
         {
             QueueNode newNode = new QueueNode();
             newNode.data = input;
@@ -205,6 +206,7 @@ namespace CircularPriorityQueue
 
         public void PrintAll()
         {
+            Console.WriteLine("*** Current Linked List ***");
             if (this.front == null)
             {
                 Console.WriteLine("Empty Queue");
@@ -233,63 +235,42 @@ namespace CircularPriorityQueue
             ArrayCircularQueue myArrayCircularQueue = new ArrayCircularQueue();
             CircularLinkedList myCircularLinkedList = new CircularLinkedList();
 
-            myCircularLinkedList.enqueue("Test", 1);
-            myCircularLinkedList.enqueue("Test3", 3);
-            myCircularLinkedList.enqueue("Test4", 4);
-            myCircularLinkedList.enqueue("Test2", 2);
-            myCircularLinkedList.PrintAll();
+            int ch;
 
-            /*int choice = 1;
-            while (choice != 4) // Exit at 4
+            do
             {
-                Console.WriteLine("1. Add new Patient");
-                Console.WriteLine("2. Remove Patient (Dequeue)");
-                Console.WriteLine("3. Print Pateints(Print all)");
-                choice = Convert.ToInt32(Console.ReadLine());
-                //use switch
-                if (choice == 1)
-                {
-                    Console.WriteLine("Enter Name");
-                    string inputString = Console.ReadLine();
-                    Console.WriteLine("Enter priority");
-                    int pr = Convert.ToInt32(Console.ReadLine());
-                    PatientData tempPatient = new PatientData(inputString, pr); // check if priority is between 1-5
-                    myArrayCircularQueue.enqueue(tempPatient);
-                    Console.WriteLine("printLineee");
-                    myArrayCircularQueue.PrintAll();
-                }
-                else if (choice == 2)
-                {
-                    // check here if the queueu is empty then dont dequeue
-                    PatientData temp = myArrayCircularQueue.dequeue();
-                    Console.WriteLine("Dequeued");
-                    temp.printPatientData();
-                }
-                else if (choice == 3)
-                {
-                    myArrayCircularQueue.PrintAll();
-                }
-            }*/
+                Console.WriteLine("1. Add Patient");
+                Console.WriteLine("2. Remove Patient");
+                Console.WriteLine("3. Print All Patients");
+                Console.WriteLine("4. Delete All Patients");
+                Console.WriteLine("0. To Exit The Loop");
 
+                ch = Convert.ToInt32(Console.ReadLine());
 
-            // Console.WriteLine("Hello world");
-            // for (int i = 0; i < 5; i++)
-            // {
-            //     Console.WriteLine("Data for Patient");
-            //     string inputString = Console.ReadLine();
-            //     PatientData tempPatient = new PatientData(inputString,i);
-            //     myArrayCircularQueue.enqueue(tempPatient);
-            //     Console.WriteLine("printLineee");
-            //     myArrayCircularQueue.PrintAll();
-            // }
-            // myArrayCircularQueue.PrintAll();
-            // Console.WriteLine("Starting Dequeue");
-            // for (int i = 0; i < 5; i++)
-            // {
-            //     PatientData temp = myArrayCircularQueue.dequeue();
-            //     Console.WriteLine("Dequeued");
-            //     temp.printPatientData();
-            // }
+                switch (ch)
+                {
+                    case 1:
+                        myArrayCircularQueue.enqueue(new PatientData("Test", 1));
+                        myCircularLinkedList.enqueue("Test", 1);
+                        break;
+                    case 2:
+                        myArrayCircularQueue.dequeue();
+                        myCircularLinkedList.dequeue();
+                        break;
+                    case 3:
+                        myArrayCircularQueue.PrintAll();
+                        myCircularLinkedList.PrintAll();
+                        break;
+                    case 4:
+                        myArrayCircularQueue.DeleteAll();
+                        myCircularLinkedList.DeleteAll();
+                        break;
+                    default:
+                        Console.WriteLine("Incorrect Option, Please Try Again");
+                        break;
+                }
+
+            } while (ch != 0);
         }
     }
 }
