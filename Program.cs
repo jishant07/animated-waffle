@@ -5,40 +5,62 @@ namespace CircularPriorityQueue
 {
     class PatientData
     {
-        public string? name;
-        public int priority = 0;
-        public PatientData(String name, int pr)
+        private String first_name { get; set; }
+        private String last_name { get; set; }
+        private int age { get; set; }
+        private int priority { get; set; }
+        // Default constructor for Patient Data.
+        public PatientData(Boolean isNull)
         {
-            this.name = name;
-            this.priority = pr;
+            if (!isNull)
+            {
+                Console.WriteLine("Enter Patient's First Name:");
+                this.first_name = Console.ReadLine();
+                Console.WriteLine("Enter Patient's Second Name:");
+                this.last_name = Console.ReadLine();
+                Console.WriteLine("Enter Patient's Age:");
+                this.age = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter Emergency Level:");
+                this.priority = Convert.ToInt32(Console.ReadLine());
+            }
         }
+        // Print Object Data
         public void printPatientData()
         {
-            Console.WriteLine("Patient Name: " + this.name);
+            Console.WriteLine("*** Patient Data Print *** ");
+            Console.WriteLine("First Name => " + this.first_name);
+            Console.WriteLine("Last Name => " + this.last_name);
+            Console.WriteLine("Age => "+ this.age.ToString());
             Console.WriteLine("Priority Patient : " + this.priority.ToString());
         }
+        // Gets the "emergencyLevel" or Priority of the Patient
         public int getPriority()
         {
             return this.priority;
         }
     }
+    // Class that has all the methods and attributes necessary for
+    // CircularArrayQueue
     class ArrayCircularQueue
     {
+        //Capacity of the CircularArrayQueue
         private int capacity;
         private PatientData[] ele;
         private int front = -1;
         private int rear = -1;
+        // Default Constructor
         public ArrayCircularQueue()
         {
             this.capacity = 20;
             this.ele = new PatientData[this.capacity];
         }
+        // Parameterised Constructor
         public ArrayCircularQueue(int capacity)
         {
             this.capacity = capacity;
             this.ele = new PatientData[this.capacity];
         }
-
+        // Functions to add data to the Queue
         public void enqueue(PatientData newPateint)
         {
             if (this.checkIfFull())
@@ -54,12 +76,13 @@ namespace CircularPriorityQueue
             ele[this.rear] = newPateint;
             this.sequenceQueue();
         }
+        // Removing one Patient from the Queue
         public PatientData dequeue()
         {
             if (this.front == -1)
             {
                 Console.WriteLine("Empty Queue");
-                return new PatientData("NULL", -1);
+                return new PatientData(true);
             }
             else
             {
@@ -77,6 +100,7 @@ namespace CircularPriorityQueue
             }
 
         }
+        // Print all Patients in the Queue
         public void PrintAll()
         {
             Console.WriteLine("*** Current Circular Array ***");
@@ -93,11 +117,13 @@ namespace CircularPriorityQueue
                 }
             }
         }
+        // Delete all the patients
         public void DeleteAll()
         {
             this.front = -1;
             this.rear = -1;
         }
+        // Returns the length of the Queue
         public int lengthOfQueue()
         {
             if (this.rear == -1 || this.front == -1)
@@ -106,6 +132,8 @@ namespace CircularPriorityQueue
             }
             return this.rear - this.front + 1;
         }
+        // This is to be called, when priority needs to be set
+        // according to the emergencyLevel(Priority)
         void sequenceQueue()
         {
             if (this.lengthOfQueue() < 2)
@@ -129,6 +157,7 @@ namespace CircularPriorityQueue
             }
             // To be called to bring the item with higher priority above
         }
+        // Returns result if the Queue is Full.
         bool checkIfFull()
         {
             if (((this.rear + 1) % this.capacity) == this.front)
@@ -139,28 +168,29 @@ namespace CircularPriorityQueue
         }
     }
 
-
+    // Queue Node
     class QueueNode
     {
         public QueueNode? next = null;
-        public String? data = null;
+        public PatientData? data = null;
         public int priority = -1;
     }
-
+    // Circular Linked List Methods and Attributes
     class CircularLinkedList
     {
         QueueNode? front;
         QueueNode? back;
+        // Default Constructor
         public CircularLinkedList()
         {
             this.front = null;
             this.back = null;
         }
-        public void enqueue(String input, int inputPriority)
+        // Add Patient Data to the Queue
+        public void enqueue(PatientData input)
         {
             QueueNode newNode = new QueueNode();
             newNode.data = input;
-            newNode.priority = inputPriority;
             newNode.next = null;
             if(this.front == null)
             {
@@ -173,19 +203,10 @@ namespace CircularPriorityQueue
                 this.back.next = newNode;
                 this.back = newNode;
                 this.back.next = this.front;
-                // QueueNode? current = this.front;
-                // if(current.next == null)
-                // {
-                //     current.next = newNode;
-                // }
-                // else
-                // {
-                //     newNode.next = current.next;
-                //     current.next = newNode;
-                // }
             }
             sequenceQueue();
         }
+        // Call when the queue is needed to set in Priority.
         public void sequenceQueue()
         {
             QueueNode? current = this.front;
@@ -199,7 +220,7 @@ namespace CircularPriorityQueue
                 if(next.priority>current.priority)
                 {
                     //Data type change here
-                    String tempData = current.data;
+                    PatientData tempData = current.data;
                     int tempPriority = current.priority;
                     current.data = next.data;
                     current.priority = next.priority;
@@ -214,7 +235,8 @@ namespace CircularPriorityQueue
                 }
             }
         }
-        public String dequeue()
+        // Remove Patient node from the Linked List
+        public PatientData dequeue()
         {
             if(this.front == null)
             {
@@ -222,14 +244,14 @@ namespace CircularPriorityQueue
             }
             else if(this.front ==  this.back)
             {
-                String returnString = this.front.data;
+                PatientData returnString = this.front.data;
                 this.front = null;
                 this.back = null;
                 return returnString;
             }
             else
             {
-                String returnString = this.front.data;
+                PatientData returnString = this.front.data;
                 this.front = this.front.next;
 
                 if(this.front == null)
@@ -238,9 +260,9 @@ namespace CircularPriorityQueue
                 }
                 return returnString;
             }
-            return "";
+            return new PatientData(false);
         }
-
+        // Print The Entire Linked List
         public void PrintAll()
         {
             Console.WriteLine("*** Current Linked List ***");
@@ -250,18 +272,22 @@ namespace CircularPriorityQueue
             }
             else
             {
+                int index = 0;
                 QueueNode temp = this.front;
                 while(temp != null)
                 {
-                    Console.WriteLine(temp.data);
+                    Console.WriteLine(index);
+                    temp.data.printPatientData();
                     temp = temp.next;
                     if(temp==this.front)
                     {
                         break;
                     }
+                    index++;
                 }
             }
         }
+        // Reset the Linked List
         public void DeleteAll()
         {
             this.front = null;
@@ -291,12 +317,15 @@ namespace CircularPriorityQueue
                 switch (ch)
                 {
                     case 1:
-                        myArrayCircularQueue.enqueue(new PatientData("Test", 1));
-                        myCircularLinkedList.enqueue("Test", 1);
+                        PatientData newPatient = new PatientData(false);
+                        myArrayCircularQueue.enqueue(newPatient);
+                        myCircularLinkedList.enqueue(newPatient);
                         break;
                     case 2:
-                        myArrayCircularQueue.dequeue();
-                        myCircularLinkedList.dequeue();
+                        PatientData circularDequeue = myArrayCircularQueue.dequeue();
+                        circularDequeue.printPatientData();
+                        PatientData linkedListDequeue = myCircularLinkedList.dequeue();
+                        linkedListDequeue.printPatientData();
                         break;
                     case 3:
                         myArrayCircularQueue.PrintAll();
